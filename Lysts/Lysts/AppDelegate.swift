@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().titleTextAttributes =
             [NSForegroundColorAttributeName:UIColor.whiteColor(),
                 NSFontAttributeName:UIFont(name: "AvenirNext-DemiBold", size: 17)!]
+        
         return true
     }
 

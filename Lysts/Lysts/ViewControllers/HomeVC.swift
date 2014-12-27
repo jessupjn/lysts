@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import AVFoundation
+import LocalAuthentication
 
 class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelegate, HttpActivityAlertDelegate {
     
@@ -16,6 +17,10 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
     
     var _menu : RNFrostedSidebar!
     var _lists : [String]?
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
     
     override func viewDidLoad() {
         self.tableView.backgroundColor = singleton.UIColorFromHex(0xFAFAFF, alpha: 1)
@@ -35,7 +40,7 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
         var size: CGSize = title.sizeWithAttributes([NSFontAttributeName: UIFont.systemFontOfSize(40.0)])
         var titleLabel : UILabel = UILabel(frame: CGRectMake((UIScreen.mainScreen().applicationFrame.size.width / 2.0) - ((size.width + 10.0) / 2.0), (self.navigationController!.navigationBar.frame.size.height / 2.0) - 30.0, size.width + 10.0, 60.0));
         
-        titleLabel.font = UIFont(name:"AvenirNext-DemiBold", size: 20.0)
+        titleLabel.font = UIFont(name:"Sprinklescolors", size: 33.0)
         titleLabel.attributedText = attributedTitle
         titleLabel.textColor = .whiteColor()
         titleLabel.clipsToBounds = false
@@ -51,7 +56,10 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
         refreshControl.backgroundColor = singleton.UIColorFromHex(0xFAFAFF)
         refreshControl.addTarget(self, action: "actionRefreshControl", forControlEvents: .ValueChanged)
         self.refreshControl = refreshControl;
-
+        
+        UIApplication.sharedApplication().setStatusBarStyle(.LightContent, animated: true)
+        self.setNeedsStatusBarAppearanceUpdate()
+        self.navigationController?.setNeedsStatusBarAppearanceUpdate()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -74,7 +82,8 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
         case "SEGUE_LIST_INFO":
             var st = ""
             if let index = sender as? Int { st = _lists![index] }
-            if let listEditVC = vc as? ListEditVC { listEditVC.delegate=self; listEditVC.setListInfo(st) }
+            var list = singleton.getList(st)?
+            if let listEditVC = vc as? ListEditVC { listEditVC.delegate=self; listEditVC.setListInfo(list) }
             break
         default:
             break
@@ -118,35 +127,31 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
     
     @IBAction func btnCamAction(sender:AnyObject){
         
-        var url = NSURL(string: "http://www.outpan.com/api/get_product.php?barcode=23123123")
-        var req = NSURLRequest(URL: url!)
-        
-        var hai = HttpActivityAlert(request: req, delegate: self)
-//        var hai = HttpActivityAlert()
-        hai.title = "Loading..."
-        hai.animationType = HttpActivityAlertAnimationType.CirclesPendulum
-        hai.presentationAnimation = HttpActivityAlertPresentationType.SquareAlertViewOutOfTop
-        hai.backgroundStyle = .Dark
-        hai.start()
+//        var url = NSURL(string: "http://www.outpan.com/api/get_product.php?barcode=23123123")
+//        var req = NSURLRequest(URL: url!)
+//        var hai = HttpActivityAlert(request: req, delegate: self)
+////        var hai = HttpActivityAlert()
+//        hai.title = "Loading..."
+//        hai.animationType = HttpActivityAlertAnimationType.CirclesPendulum
+//        hai.presentationAnimation = HttpActivityAlertPresentationType.SquareAlertViewOutOfTop
+//        hai.backgroundStyle = .Dark
+//        hai.start()
 
         
-        
-        
-        
-//        if ( UIImagePickerController.isSourceTypeAvailable(.Camera) ) {
-//            // show camera
-//            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: {
-//                (granted) -> Void in
-//                if granted {
-//                    self.performSegueWithIdentifier("SEGUE_SHOW_CAMERA", sender: nil)
-//                } else {
-//                    println("no camera access granted")
-//                }
-//            })
-//        } else {
-//            // don't show camera
-//            println("camera unavailable")
-//        }
+        if ( UIImagePickerController.isSourceTypeAvailable(.Camera) ) {
+            // show camera
+            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: {
+                (granted) -> Void in
+                if granted {
+                    self.performSegueWithIdentifier("SEGUE_SHOW_CAMERA", sender: nil)
+                } else {
+                    println("no camera access granted")
+                }
+            })
+        } else {
+            // don't show camera
+            println("camera unavailable")
+        }
 
     }
 
@@ -248,7 +253,55 @@ extension HomeVC {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.performSegueWithIdentifier("SEGUE_VIEW_LIST", sender: tableView.cellForRowAtIndexPath(indexPath)?.textLabel?.text)
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        var listName = tableView.cellForRowAtIndexPath(indexPath)?.textLabel?.text
+        var list = singleton.getList(listName)!
+        
+        if list.isEncrypted() {
+            let context = LAContext() // Get the local authentication context.
+            var error: NSError? // Declare a NSError variable.
+            var reasonString = "This list is encrypted... please use TouchID to view it."
+            
+            // Check if the device can evaluate the policy.
+            if context.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error: &error) {
+                [context .evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reasonString, reply: { (success: Bool, evalPolicyError: NSError?) -> Void in
+                    
+                    if success {
+                        self.performSegueWithIdentifier("SEGUE_VIEW_LIST", sender: listName)
+                    }
+                    else{
+                        // If authentication failed then show a message to the console with a short description.
+                        // In case that the error is a user fallback, then show the password alert view.
+                        println(evalPolicyError?.localizedDescription)
+                        
+                        switch evalPolicyError!.code {
+                            
+                        case LAError.SystemCancel.rawValue:
+                            println("Authentication was cancelled by the system")
+                            
+                        case LAError.UserCancel.rawValue:
+                            println("Authentication was cancelled by the user")
+                            
+                        case LAError.UserFallback.rawValue:
+                            println("User selected to enter custom password")
+                            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+//                                selßf.showPasswordAlert()
+                            })
+                            
+                        default:
+                            println("Authentication failed")
+                            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+//                                self.showPasswordAlert()
+                            })
+                        }
+                    }
+                    
+                })]
+            }
+        } else {
+            self.performSegueWithIdentifier("SEGUE_VIEW_LIST", sender: listName)
+        }
     }
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {

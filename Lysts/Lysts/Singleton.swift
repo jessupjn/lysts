@@ -39,6 +39,7 @@ class Singleton : NSObject
 //                      MODIFYING OUR DATA IN MEMORY OF LISTS
 //
 extension Singleton {
+    
     func createListOfLists() -> Bool {
         if getListOfLists() == nil {
             var list:[String] = []
@@ -73,24 +74,23 @@ extension Singleton {
         return getUserInformation().synchronize()
     }
     
-    func createOrEditList(list_obj:List, name:String?) -> Bool {
+    func createOrEditList(list_obj:List, new_list_obj:List?) -> Bool {
+        
         var list = getListOfLists()
-
 //        if(list == nil) createListOfLists()
         
         if let index = find(list!, list_obj.name()) {
-            if(name != nil) {
+            if(new_list_obj != nil) {
                 
                 // modify name in list
-                list![index] = name!
+                list![index] = new_list_obj!.name()
                 getUserInformation().setObject(list, forKey: "LIST_TITLES")
                 
                 // delete old list object
                 getUserInformation().removeObjectForKey(list_obj.name())
 
                 // set new list object
-                list_obj.setName(name!)
-                return setList( list_obj, newList:false )
+                return setList( new_list_obj!, newList:false )
             } else {
                 return false // name in use
             }

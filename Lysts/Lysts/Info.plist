@@ -24,6 +24,7 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Sprinklescolors.ttf</string>
 		<string>velocity-font.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -34,6 +35,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -42,8 +45,6 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
-	<key>UIStatusBarStyle</key>
-	<string>Light</string>
+	<false/>
 </dict>
 </plist>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>6DEFD5F7-1567-4A44-9FF2-590C17CD2BE3</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Lysts</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>7495E1307C32C0FB9E50B50194A134311B5C366A</key>
+		<string>https://github.com/jessupjn/lysts.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Lysts/Lysts.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>7495E1307C32C0FB9E50B50194A134311B5C366A</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/jessupjn/lysts.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>7495E1307C32C0FB9E50B50194A134311B5C366A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7495E1307C32C0FB9E50B50194A134311B5C366A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>lysts</string>
+		</dict>
+	</array>
+</dict>
+</plist>

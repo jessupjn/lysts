@@ -138,102 +138,21 @@ extension ListViewVC {
         return 55
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return UIView()
-        var item = _list[section]
-        
-        var viw = UIView(frame: CGRectMake(0,0,tableView.frame.width, HEADER_HEIGHT_CONSTANT))
-        viw.backgroundColor = singleton.UIColorFromHex(0xF9F9FF, alpha: 0.93)
-        
-        // divider
-        var helper = UIView(frame: CGRectMake(0,viw.frame.height - 1,viw.frame.width, 1))
-        helper.backgroundColor = singleton.UIColorFromHex(0xDADADA, alpha: 1)
-        viw.addSubview(helper)
-        
-        // list is empty
-        if _list.count == 0 {
-            helper = UILabel(frame: viw.frame)
-            (helper as UILabel).textAlignment = .Center
-            (helper as UILabel).text = "No Items to Diplay"
-            (helper as UILabel).font = UIFont(name: "AvenirNext-DemiBold", size: 14)
-
-            viw.addSubview(helper)
-            return viw
-        }
-        
-        // expand button
-        helper = UIButton.buttonWithType(.Custom) as UIView
-        helper.frame = viw.frame
-        (helper as UIButton).setTitleColor(UIColor.orangeColor(), forState: .Normal)
-        (helper as UIButton).addTarget(self, action: "expandCell:event:", forControlEvents: .TouchUpInside)
-        helper.tag = section
-        viw.addSubview(helper)
-        
-        // index label
-        helper = UILabel(frame: CGRectMake(15, 0, 40, HEADER_HEIGHT_CONSTANT))
-        (helper as UILabel).text = "\(section)"
-        (helper as UILabel).textColor = singleton.UIColorFromHex(0xBBBBBB, alpha: 1)
-        (helper as UILabel).font = UIFont(name: "AvenirNext-DemiBold", size: 14)
-        viw.addSubview(helper)
-        
-        // divider
-        helper = UIView(frame: CGRectMake(50, 5, 1, HEADER_HEIGHT_CONSTANT - 10))
-        helper.backgroundColor = singleton.UIColorFromHex(0xDDDDDD, alpha: 1)
-        viw.addSubview(helper)
-        
-        // name label
-        helper = UILabel(frame: CGRectMake(60, 0, tableView.frame.width - 70, HEADER_HEIGHT_CONSTANT))
-        (helper as UILabel).text = _list[section].getTitle()
-        (helper as UILabel).textColor = .darkGrayColor()
-        (helper as UILabel).font = UIFont(name: "AvenirNext-DemiBold", size: 14)
-        viw.addSubview(helper)
-        
-        // edit button
-        var color = singleton.UIColorFromHex(0x66CCCC, alpha: 1.0)
-        helper = UIButton.buttonWithType(.Custom) as UIView
-        helper.frame = CGRectMake(tableView.frame.width - 75, 15, HEADER_HEIGHT_CONSTANT - 30, HEADER_HEIGHT_CONSTANT - 30)
-        var img = UIImage(named: "btn-edit-item")?.changeImageColor(color)
-        (helper as UIButton).setImage(img, forState: .Normal)
-        (helper as UIButton).setTitleColor(color, forState: .Normal)
-        (helper as UIButton).addTarget(self, action: "btnActionEditItem:", forControlEvents: .TouchUpInside)
-        helper.tag = section
-        helper.layer.borderWidth = 1
-        helper.layer.borderColor = color.CGColor
-        helper.layer.cornerRadius = (HEADER_HEIGHT_CONSTANT - 30) / 2
-        viw.addSubview(helper)
-
-        // delete button
-        color = singleton.UIColorFromHex(0xff6666, alpha: 1.0)
-        helper = UIButton.buttonWithType(.Custom) as UIView
-        helper.frame = CGRectMake(tableView.frame.width - 40, 15, HEADER_HEIGHT_CONSTANT - 30, HEADER_HEIGHT_CONSTANT - 30)
-        img = UIImage(named: "btn-delete-item")?.changeImageColor(color)
-        (helper as UIButton).setImage(img, forState: .Normal)
-        (helper as UIButton).setTitleColor(color, forState: .Normal)
-        (helper as UIButton).addTarget(self, action: "btnActionDeleteItem:", forControlEvents: .TouchUpInside)
-        helper.tag = section
-        helper.layer.borderWidth = 1
-        helper.layer.borderColor = color.CGColor
-        helper.layer.cornerRadius = (HEADER_HEIGHT_CONSTANT - 30) / 2
-        viw.addSubview(helper)
-
-        
-        return viw
-    }
-    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("itemCell", forIndexPath: indexPath) as UITableViewCell;
 
         cell.textLabel!.text =  "\(indexPath.row)"
-        cell.textLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 14)
-
+        cell.textLabel!.font = UIFont(name: "AvenirNext-Regular", size: 14)
+        cell.backgroundColor = .clearColor()
+        cell.accessoryType = .DisclosureIndicator
 //        // divider
 //        var helper = UIView(frame: CGRectMake(50, 5, 1, HEADER_HEIGHT_CONSTANT - 10))
 //        helper.backgroundColor = singleton.UIColorFromHex(0xDDDDDD, alpha: 1)
 //        cell.addSubview(helper)
         
         // name label
-        var helper = UILabel(frame: CGRectMake(60, 0, tableView.frame.width - 70, HEADER_HEIGHT_CONSTANT))
+        var helper = UILabel(frame: CGRectMake(45, 0, tableView.frame.width - 70, HEADER_HEIGHT_CONSTANT))
         (helper as UILabel).text = _list[indexPath.row].getTitle()
         (helper as UILabel).textColor = .darkGrayColor()
         (helper as UILabel).font = UIFont(name: "AvenirNext-DemiBold", size: 14)
@@ -244,6 +163,9 @@ extension ListViewVC {
 //        pagedImv.clipsToBounds = true
 //        cell.contentView.addSubview(pagedImv)
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
     }
     
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {

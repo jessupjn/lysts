@@ -32,7 +32,7 @@
 
 /// UI Objects
 #define kDefaultStyle JLSTYLE_STEEL
-#define kActionButtonHeight 45.0f
+#define kActionButtonHeight 50.0f
 
 /// Display Macros
 #define kBGFadeOpacity .3

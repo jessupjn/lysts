@@ -9,13 +9,14 @@
 import Foundation
 import UIKit
 
-class ListViewVC : UITableViewController {
+class ListViewVC : UITableViewController, JLActionSheetDelegate {
     
     private var HEADER_HEIGHT_CONSTANT:CGFloat = 55
 
     var singleton = Singleton.getSingleton()
+    var _listInfo : List!
     var _list : [ListItem] = []
-    
+    @IBOutlet var _navItem :UINavigationItem!
     var _selected:[Int] = []
     
     override func viewDidLoad() {
@@ -23,20 +24,32 @@ class ListViewVC : UITableViewController {
         self.tableView.backgroundColor = singleton.UIColorFromHex(0xFAFAFF, alpha: 1)
         self.view.backgroundColor = singleton.UIColorFromHex(0xFAFAFF, alpha: 1)
         var scanBarButtonItem = UIBarButtonItem()
-        self.navigationItem.backBarButtonItem = nil;
         
         var tg = UITapGestureRecognizer(target: self, action: "scrollToTop")
         tg.numberOfTapsRequired = 2
         self.navigationController?.navigationBar.addGestureRecognizer(tg)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        var color = UIColor(red: 83.0/255, green: 195.0/255, blue: 193.0/255, alpha: 1.0)
+        UIView.animateWithDuration(0.15, animations: {
+            () -> Void in
+            self.navigationController!.navigationBar.barTintColor = color
+        })
+        self.title = _listInfo.name()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        self.title = "list"
+    }
+    
     func scrollToTop(){
-        tableView.setContentOffset(CGPointMake(0,-HEADER_HEIGHT_CONSTANT), animated: true)
+        tableView.setContentOffset(CGPointMake(0,-63), animated: true)
     }
     
     func setList(list:List){
-        self.title = list.name()
 
+        _listInfo = list
         if let items = list.items() {
             _list = items
         }
@@ -98,22 +111,25 @@ class ListViewVC : UITableViewController {
         }
     }
     
-    func btnActionEditItem(sender:UIView){
-        self.performSegueWithIdentifier("SEGUE_EDIT_ITEM", sender: sender.tag)
+    @IBAction func btnActionAddNew(sender:UIBarButtonItem){
+        var actionSheet = JLActionSheet(title: "", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: ["Scan Barcode", "Add Item"])
+        actionSheet.style = JLSTYLE_MISTERLISTER
+        actionSheet.showOnViewController(self)
     }
     
-    func btnActiondeleteItem(sender:UIView){
-        
-    }
+    func endEditing() { self.view.endEditing(true) }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         var vc = segue.destinationViewController as UIViewController
         
         switch segue.identifier! {
         case "SEGUE_EDIT_ITEM":
-//            (vc as ItemEditVC)
+            if sender != nil { (vc as ItemEditVC).setItemInfo(sender as ListItem)}
             break
-        case "":
+        case "SEGUE_VIEW_ITEM":
+//            (vc as ItemViewVC).setItem( _list[ (sender as NSIndexPath).row ] )
+            break
+        case "SEGUE_SHOW_CAMERA":
             break
         default:
             break
@@ -172,6 +188,9 @@ extension ListViewVC {
         var str = "        "
         var moreRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: str,
             handler:{action, indexpath in
+            
+                self.performSegueWithIdentifier("SEGUE_EDIT_ITEM", sender: self._list[indexPath.row])
+
             println("MORE•ACTION");
         });
         var img = UIImage(named:"tbl_cell_edit")!
@@ -197,6 +216,26 @@ extension ListViewVC {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        self.performSegueWithIdentifier("SEGUE_VIEW_ITEM", sender: indexPath.row)
+    }
+}
+
+
+// JLActionSheet delegate methods
+extension ListViewVC {
+    func actionSheet(actionSheet: JLActionSheet!, clickedButtonAtIndex buttonIndex: Int) {
+        switch actionSheet.titleAtIndex(buttonIndex).lowercaseString {
+        case "scan barcode":
+            println("Open camera")
+            self.performSegueWithIdentifier("SEGUE_SHOW_CAMERA", sender: nil)
+            break
+        case "add item":
+            println("Add item")
+            self.performSegueWithIdentifier("SEGUE_EDIT_ITEM", sender: nil)
+            break
+        default:
+            break
+        }
     }
 }

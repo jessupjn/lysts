@@ -11,7 +11,7 @@ import UIKit
 import AVFoundation
 import LocalAuthentication
 
-class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelegate, HttpActivityAlertDelegate {
+class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelegate, HttpActivityAlertDelegate, UIAlertViewDelegate {
     
     let singleton = Singleton.getSingleton()
     
@@ -25,15 +25,14 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
     override func viewDidLoad() {
         self.tableView.backgroundColor = singleton.UIColorFromHex(0xFAFAFF, alpha: 1)
         self.view.backgroundColor = singleton.UIColorFromHex(0xFAFAFF, alpha: 1)
-        
-        var images : [UIImage] = [UIImage(named: "Btn-Menu")!.changeImageColor(UIColor.whiteColor()),
+        var images : [UIImage] = [UIImage(named: "Btn-New-List")!.changeImageColor(UIColor.whiteColor()),
             UIImage(named: "Btn-Cam")!.changeImageColor(UIColor.whiteColor()),
-            UIImage(named: "Btn-Menu")!.changeImageColor(UIColor.whiteColor()) ]
+            UIImage(named: "Btn-Settings")!.changeImageColor(UIColor.whiteColor()) ]
         _menu = RNFrostedSidebar(images: images)
         _menu.borderWidth = 2
         _menu.delegate = self
         
-        var title:NSString = "mister  lister";
+        var title:NSString = "mister lister";
         var attributedTitle = NSMutableAttributedString(string: title)
         attributedTitle.addAttribute(NSKernAttributeName, value:2.0, range:NSMakeRange(0,title.length));
         
@@ -46,7 +45,6 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
         titleLabel.clipsToBounds = false
         titleLabel.textAlignment = .Center
         self.navigationItem.titleView = titleLabel;
-        
         var panGesture = UISwipeGestureRecognizer(target: self, action: "menuPanGesture:")
         panGesture.direction = UISwipeGestureRecognizerDirection.Right;
         self.view.addGestureRecognizer(panGesture)
@@ -60,17 +58,27 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
         UIApplication.sharedApplication().setStatusBarStyle(.LightContent, animated: true)
         self.setNeedsStatusBarAppearanceUpdate()
         self.navigationController?.setNeedsStatusBarAppearanceUpdate()
+        
+        var tg = UITapGestureRecognizer(target: self, action: "scrollToTop")
+        tg.numberOfTapsRequired = 2
+        self.navigationController?.navigationBar.addGestureRecognizer(tg)
     }
     
     override func viewWillAppear(animated: Bool) {
         dataUpdated()
+        var color = singleton.UIColorFromHex(0xE33A3A, alpha:1.0)
+        UIView.animateWithDuration(0.15, animations: {
+            () -> Void in
+            self.navigationController!.navigationBar.barTintColor = color
+
+        })
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         var vc = segue.destinationViewController as UIViewController
         
         switch segue.identifier! {
-        case "SEGUE_SHOW_CAMERA":
+        case "SEGUE_SHOW_CAMERA", "SEGUE_SHOW_SETTINGS":
             break
         case "SEGUE_VIEW_LIST":
             if let st = sender as? String {
@@ -90,6 +98,10 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
         }
     }
     
+    func scrollToTop(){
+        tableView.setContentOffset(CGPointMake(0,-63), animated: true)
+    }
+    
     func actionRefreshControl() {
         var user_prefs = singleton.getUserInformation()
         
@@ -106,10 +118,22 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
     }
     
     func sidebar(sidebar: RNFrostedSidebar!, didTapItemAtIndex index: UInt) {
-        sidebar.dismiss()
         if index == 0 {
             self.performSegueWithIdentifier("SEGUE_LIST_INFO", sender: nil)
         }
+        
+        if index == 1 {
+            
+        }
+        
+        if index == 2 {
+            var time = dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC)))
+            dispatch_after(time, dispatch_get_main_queue(), {
+                self.performSegueWithIdentifier("SEGUE_SHOW_SETTINGS", sender: nil)
+            })
+        }
+        sidebar.dismiss()
+
     }
     
     func updateTable() {
@@ -136,7 +160,8 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
 //        hai.presentationAnimation = HttpActivityAlertPresentationType.SquareAlertViewOutOfTop
 //        hai.backgroundStyle = .Dark
 //        hai.start()
-
+        self.performSegueWithIdentifier("SEGUE_SHOW_SETTINGS", sender: nil)
+return
         
         if ( UIImagePickerController.isSourceTypeAvailable(.Camera) ) {
             // show camera
@@ -145,11 +170,14 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
                 if granted {
                     self.performSegueWithIdentifier("SEGUE_SHOW_CAMERA", sender: nil)
                 } else {
+                    UIAlertView(title: "Whoops!", message: "\nYou need to grant camera access to use this feature...\n\nPlease grant access in Settings -> Privacy -> Camera", delegate: self, cancelButtonTitle: "Okay").show()
                     println("no camera access granted")
                 }
             })
         } else {
             // don't show camera
+            UIAlertView(title: "Whoops!", message: "\nA camera could not be found\n on your device", delegate: self, cancelButtonTitle: "Okay").show()
+//            JackAlertView.showWithTitle("Please grant camera access", ok_title: "Okay", showsCancelButton: true)
             println("camera unavailable")
         }
 
@@ -268,7 +296,9 @@ extension HomeVC {
                 [context .evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reasonString, reply: { (success: Bool, evalPolicyError: NSError?) -> Void in
                     
                     if success {
-                        self.performSegueWithIdentifier("SEGUE_VIEW_LIST", sender: listName)
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.performSegueWithIdentifier("SEGUE_VIEW_LIST", sender: listName)                            
+                        })
                     }
                     else{
                         // If authentication failed then show a message to the console with a short description.
@@ -286,7 +316,7 @@ extension HomeVC {
                         case LAError.UserFallback.rawValue:
                             println("User selected to enter custom password")
                             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-//                                selßf.showPasswordAlert()
+//                                self.showPasswordAlert()
                             })
                             
                         default:
@@ -312,7 +342,6 @@ extension HomeVC {
         var moreRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: str, handler:{action, indexpath in
             self.performSegueWithIdentifier("SEGUE_LIST_INFO", sender: indexPath.row)
             tableView.cellForRowAtIndexPath(indexPath)?.setEditing(false, animated: true)
-            println("MORE•ACTION");
         });
         var img = UIImage(named:"tbl_cell_edit")!
         var newSize = CGSizeMake(75, 55)
@@ -331,7 +360,6 @@ extension HomeVC {
                 self.tableView.deleteRowsAtIndexPaths([indexpath], withRowAnimation:.Right)
                 self.tableView.endUpdates()
             }
-            println("DELETE•ACTION");
         });
         img = UIImage(named:"tbl_cell_delete")!
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);

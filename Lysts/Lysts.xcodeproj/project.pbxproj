@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		040188531A377B08001D1357 /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040188521A377B08001D1357 /* Singleton.swift */; };
 		045A0AAA1A3F2C4100090637 /* ListViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045A0AA91A3F2C4100090637 /* ListViewVC.swift */; };
+		045A27651A4EF1D8004E7A55 /* JackAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045A27641A4EF1D8004E7A55 /* JackAlertView.swift */; };
 		047C8C671A377B4C001CB99E /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 047C8C621A377B4C001CB99E /* UIImage+Additions.m */; };
 		047C8C681A377B4C001CB99E /* RNFrostedSidebar.m in Sources */ = {isa = PBXBuildFile; fileRef = 047C8C661A377B4C001CB99E /* RNFrostedSidebar.m */; };
 		047C8C6C1A377B8F001CB99E /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047C8C6B1A377B8F001CB99E /* HomeVC.swift */; };
@@ -52,6 +53,7 @@
 /* Begin PBXFileReference section */
 		040188521A377B08001D1357 /* Singleton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
 		045A0AA91A3F2C4100090637 /* ListViewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ListViewVC.swift; path = ViewControllers/ListViewVC.swift; sourceTree = "<group>"; };
+		045A27641A4EF1D8004E7A55 /* JackAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JackAlertView.swift; path = JackAlertView/JackAlertView.swift; sourceTree = "<group>"; };
 		047C8C611A377B4C001CB99E /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Additions.h"; sourceTree = "<group>"; };
 		047C8C621A377B4C001CB99E /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Additions.m"; sourceTree = "<group>"; };
 		047C8C651A377B4C001CB99E /* RNFrostedSidebar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNFrostedSidebar.h; sourceTree = "<group>"; };
@@ -113,6 +115,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		045A27661A4EF1E0004E7A55 /* JackAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				045A27641A4EF1D8004E7A55 /* JackAlertView.swift */,
+			);
+			name = JackAlertView;
+			sourceTree = "<group>";
+		};
 		047C8C601A377B4C001CB99E /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,6 +135,7 @@
 		047C8C631A377B4C001CB99E /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				045A27661A4EF1E0004E7A55 /* JackAlertView */,
 				04C028021A49AD9F006EB37D /* HttpActivityAlert */,
 				04FAC3591A4311D800664B7C /* FXPageControl */,
 				04FAC34D1A421F0A00664B7C /* JLActionSheet */,
@@ -412,6 +423,7 @@
 				04FAC3441A41D0CF00664B7C /* ListItem.swift in Sources */,
 				04C028041A49ADF6006EB37D /* HttpActivityAlert.swift in Sources */,
 				04A244931A406DFF008360B3 /* List.swift in Sources */,
+				045A27651A4EF1D8004E7A55 /* JackAlertView.swift in Sources */,
 				047C8C6C1A377B8F001CB99E /* HomeVC.swift in Sources */,
 				04FAC3581A42209E00664B7C /* ItemEditVC.swift in Sources */,
 				047C8C7B1A3B2830001CB99E /* CameraVC.swift in Sources */,
@@ -552,7 +564,7 @@
 				INFOPLIST_FILE = Lysts/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "2140ee61-fca4-40a2-85ed-e7bfe6f378bc";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Lysts/Lysts-Bridging-Header.h";
 			};
@@ -567,7 +579,7 @@
 				INFOPLIST_FILE = Lysts/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "2140ee61-fca4-40a2-85ed-e7bfe6f378bc";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Lysts/Lysts-Bridging-Header.h";
 			};

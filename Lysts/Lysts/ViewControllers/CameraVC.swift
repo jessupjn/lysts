@@ -23,6 +23,7 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var _output : AVCaptureMetadataOutput!
     var _previewLayer : AVCaptureVideoPreviewLayer!
     
+    @IBOutlet var _resultsHeightConstraint : NSLayoutConstraint!
     @IBOutlet var _highlightView : UIView!
     var _btnFindInfo : UIButton!
     var _btnAddInfo : UIButton!
@@ -36,6 +37,8 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCamera()
+        _resultsHeightConstraint.constant = 0
+        self.view.layoutIfNeeded()
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -68,7 +71,10 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         if detectionString == nil {
         
         } else {
-            showAcceptView(detectionString)
+            UIView.animateWithDuration(0.2, animations: { () -> Void in
+                self._resultsHeightConstraint.constant = 45
+                self.view.layoutIfNeeded()
+            })
         }
         
         _highlightView.layer.frame = highlightViewRect;

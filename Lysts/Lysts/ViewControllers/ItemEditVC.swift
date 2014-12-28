@@ -22,21 +22,28 @@ class ItemEditVC : UIViewController {
     var singleton = Singleton.getSingleton()
     var delegate:ItemEditVCDelegate! = nil
     var _name : String?
+    var _item : ListItem?
+
+    @IBOutlet var _viwRoundedBg:[UIView]!
     
     @IBOutlet var _lblHeader:UILabel!
     @IBOutlet var _blurView:UIView!
-    
-    @IBOutlet var _viwNameBg:UIView!
-    @IBOutlet var _txfName:UITextField!
+
     
     override func viewDidLoad() {
-//        _lblHeader.text = _name == nil ? STRING_CREATE : STRING_EDIT
-
+        _lblHeader.text = _item == nil ? STRING_CREATE : STRING_EDIT
+        for viw in _viwRoundedBg {
+            viw.layer.cornerRadius = viw.frame.height / 3
+        }
+        
+        if _item != nil {
+ 
+        }
     }
     
     func setItemInfo(item:ListItem) {
         println("setItemInfo: \(item.getTitle())")
-        _name = item.getTitle()
+        _item = item
     }
     
     

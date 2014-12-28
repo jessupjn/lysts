@@ -113,6 +113,23 @@
             _cancelTextColor        = _textColor;
             _cancelTextShadowColor  = _textShadowColor;
         }
+        else if(style == JLSTYLE_MISTERLISTER)
+        {
+            _standardBGColor        = Color(250, 250, 250, 0.8);
+            _highlightedBGColor     = Color(240, 240, 240, 1.0);
+            
+            _cancelBGColor          = Color(250, 250, 250, 1.0);
+            _cancelHighlightedBG    = Color(240, 240, 240, 1.0);
+            
+            _darkBorderColor        = Color(0, 0, 0, .2);
+            _darkBorderColor        = Color(0, 0, 0, .2);
+            
+            _textColor              = Color(25, 78, 135, 1.0);
+            _textShadowColor        = [UIColor clearColor];
+            
+            _cancelTextColor        = _textColor;
+            _cancelTextShadowColor  = _textShadowColor;
+        }
     }
     
     return self;

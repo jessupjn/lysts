@@ -15,6 +15,7 @@ class ListItem : NSObject, NSCoding {
     var _title:String!
     var _description:String?
     var _imageUrls:[NSURL]?
+    var _images:[UIImage]?
     var _dateModified:NSDate!
     
     internal
@@ -25,6 +26,14 @@ class ListItem : NSObject, NSCoding {
         _imageUrls = imageUrls
         _dateModified = NSDate()
 
+    }
+    
+    init(title:String, description:String?, images:[UIImage]?) {
+        super.init()
+        _title = title
+        _description = description
+        _images = images
+        _dateModified = NSDate()        
     }
     
     required init(coder aDecoder: NSCoder) {

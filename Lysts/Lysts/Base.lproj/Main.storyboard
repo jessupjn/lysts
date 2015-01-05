@@ -75,7 +75,7 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <segue destination="z5K-8y-Sii" kind="show" identifier="SEGUE_VIEW_LIST" id="Rdb-8T-Gtf"/>
-                        <segue destination="R0Z-ek-YNY" kind="presentation" identifier="SEGUE_LIST_INFO" modalPresentationStyle="overCurrentContext" modalTransitionStyle="coverVertical" id="ADt-KH-rJ2"/>
+                        <segue destination="R0Z-ek-YNY" kind="presentation" identifier="SEGUE_LIST_INFO" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="ADt-KH-rJ2"/>
                         <segue destination="SmB-Vw-ttP" kind="presentation" identifier="SEGUE_SHOW_CAMERA" modalPresentationStyle="overCurrentContext" id="3oq-8H-Zbc"/>
                         <segue destination="3vb-zW-Dy5" kind="show" identifier="SEGUE_SHOW_SETTINGS" id="svd-ve-xQ1"/>
                     </connections>
@@ -359,7 +359,7 @@
                     <connections>
                         <outlet property="_navItem" destination="DXH-fi-CG9" id="7yq-L0-21A"/>
                         <segue destination="WvA-tH-k8v" kind="show" identifier="SEGUE_VIEW_ITEM" id="K9G-63-QPD"/>
-                        <segue destination="04K-lw-UEt" kind="presentation" identifier="SEGUE_EDIT_ITEM" modalPresentationStyle="overCurrentContext" id="xgH-eZ-atf"/>
+                        <segue destination="04K-lw-UEt" kind="presentation" identifier="SEGUE_EDIT_ITEM" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="xgH-eZ-atf"/>
                         <segue destination="SmB-Vw-ttP" kind="presentation" identifier="SEGUE_SHOW_CAMERA" modalPresentationStyle="overCurrentContext" id="n3x-w5-cqy"/>
                     </connections>
                 </tableViewController>
@@ -378,7 +378,20 @@
                     <view key="view" contentMode="scaleToFill" id="CmR-ux-CWa">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cbO-hz-fKa">
+                                <rect key="frame" x="0.0" y="64" width="600" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="QEY-7f-W05"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="cbO-hz-fKa" firstAttribute="top" secondItem="JAY-dj-kbV" secondAttribute="bottom" id="I8Z-am-nrL"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="cbO-hz-fKa" secondAttribute="trailing" constant="-16" id="bnY-Jb-CL9"/>
+                            <constraint firstItem="cbO-hz-fKa" firstAttribute="leading" secondItem="CmR-ux-CWa" secondAttribute="leadingMargin" constant="-16" id="mMe-Xp-sBX"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Title" id="t4E-Hj-c7J">
                         <barButtonItem key="rightBarButtonItem" image="Btn-Share" id="QtD-NH-LpG">
@@ -388,6 +401,10 @@
                         </barButtonItem>
                     </navigationItem>
                     <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="imgHeightConstraint" destination="QEY-7f-W05" id="gq6-QR-9qh"/>
+                        <outlet property="viwImages" destination="cbO-hz-fKa" id="dli-I2-j3Y"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j4l-gx-Qef" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -707,7 +724,7 @@
     <resources>
         <image name="Btn-Add-Item" width="22" height="22"/>
         <image name="Btn-Back" width="22" height="22"/>
-        <image name="Btn-Cam" width="22" height="22"/>
+        <image name="Btn-Cam" width="22" height="13"/>
         <image name="Btn-Menu" width="22" height="22"/>
         <image name="Btn-Share" width="22" height="22"/>
         <image name="img-touchID" width="83" height="81"/>

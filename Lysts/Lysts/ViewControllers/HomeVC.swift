@@ -39,7 +39,7 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
         var size: CGSize = title.sizeWithAttributes([NSFontAttributeName: UIFont.systemFontOfSize(40.0)])
         var titleLabel : UILabel = UILabel(frame: CGRectMake((UIScreen.mainScreen().applicationFrame.size.width / 2.0) - ((size.width + 10.0) / 2.0), (self.navigationController!.navigationBar.frame.size.height / 2.0) - 30.0, size.width + 10.0, 60.0));
         
-        titleLabel.font = UIFont(name:"Sprinklescolors", size: 33.0)
+        titleLabel.font = UIFont(name:"Sprinklescolors", size: 28.0)
         titleLabel.attributedText = attributedTitle
         titleLabel.textColor = .whiteColor()
         titleLabel.clipsToBounds = false
@@ -78,7 +78,9 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
         var vc = segue.destinationViewController as UIViewController
         
         switch segue.identifier! {
-        case "SEGUE_SHOW_CAMERA", "SEGUE_SHOW_SETTINGS":
+        case "SEGUE_SHOW_CAMERA":
+            break
+        case "SEGUE_SHOW_SETTINGS":
             break
         case "SEGUE_VIEW_LIST":
             if let st = sender as? String {
@@ -160,8 +162,6 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
 //        hai.presentationAnimation = HttpActivityAlertPresentationType.SquareAlertViewOutOfTop
 //        hai.backgroundStyle = .Dark
 //        hai.start()
-        self.performSegueWithIdentifier("SEGUE_SHOW_SETTINGS", sender: nil)
-return
         
         if ( UIImagePickerController.isSourceTypeAvailable(.Camera) ) {
             // show camera

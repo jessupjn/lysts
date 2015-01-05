@@ -60,8 +60,8 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
                     barCodeObject = _previewLayer.transformedMetadataObjectForMetadataObject(metadata as AVMetadataMachineReadableCodeObject) as AVMetadataMachineReadableCodeObject
                     highlightViewRect = barCodeObject.bounds
-                    if highlightViewRect.width > 20 { highlightViewRect.size.width = 20 }
-                    if highlightViewRect.height > 20 { highlightViewRect.size.height = 20 }
+                    if highlightViewRect.width < 20 { highlightViewRect.size.width = 20 }
+                    if highlightViewRect.height < 20 { highlightViewRect.size.height = 20 }
                     detectionString = (metadata as AVMetadataMachineReadableCodeObject).stringValue
                     break;
                 }
@@ -119,62 +119,6 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         xButton.titleLabel!.font = .systemFontOfSize(30)
         xButton.titleLabel!.textColor = .whiteColor()
 //        self.view.addSubview(xButton)
-    }
-    
-    var viewShown:Bool = false
-    func showAcceptView(code:NSString){
-        if !viewShown {
-            viewShown = true
-            var bounds = UIScreen.mainScreen().bounds
-            bounds.origin.y = bounds.height
-            bounds.origin.x = 0
-            bounds.size.width = bounds.width
-            bounds.size.height = 80
-
-            var blur = UIBlurEffect(style:.Dark)
-            var blurView = UIVisualEffectView(effect: blur)
-            var vibrancy = UIVibrancyEffect(forBlurEffect: blurView.effect as UIBlurEffect)
-            var vibrancyView = UIVisualEffectView(effect: vibrancy)
-
-            vibrancyView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
-            blurView.contentView.addSubview(vibrancyView)
-            blurView.frame = bounds
-            blurView.tag = 1
-            
-            blurView.contentView.layer.cornerRadius = 20
-            blurView.layer.cornerRadius = 20
-            vibrancyView.contentView.layer.cornerRadius = 20
-            vibrancyView.layer.cornerRadius = 20
-            
-            self.view.addSubview(blurView)
-            
-            _label = UILabel(frame: CGRectMake(0, 0, blurView.frame.width, 23))
-            _label.textColor = .whiteColor()
-            _label.textAlignment = .Center
-            _label.text = code
-            blurView.addSubview( _label )
-            
-            
-            bounds.origin.y = UIScreen.mainScreen().bounds.height - 75
-            UIView.animateWithDuration(0.25, animations: {
-                () -> Void in
-                blurView.frame = bounds
-            }, completion: {
-                (complete) -> Void in
-                
-                var autoGrab = self.singleton.getUserInformation().boolForKey("SETTINGS_AUTO_GRAB_INFO")
-                if self.singleton.getUserInformation().objectForKey("SETTINGS_AUTO_GRAB_INFO") == nil {
-                    // prompt user to see if they want to get info
-                } else if autoGrab {
-                    // GET INFO FOR ITEM
-                } else {
-                    // add button to move forward
-                }
-            })
-            
-        } else {
-            println( self.view.viewWithTag(1) )
-        }
     }
     
     @IBAction func btnXAction(sender:AnyObject) {

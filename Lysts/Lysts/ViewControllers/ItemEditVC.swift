@@ -28,7 +28,6 @@ class ItemEditVC : UIViewController {
     
     @IBOutlet var _lblHeader:UILabel!
     @IBOutlet var _blurView:UIView!
-
     
     override func viewDidLoad() {
         _lblHeader.text = _item == nil ? STRING_CREATE : STRING_EDIT

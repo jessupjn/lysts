@@ -112,7 +112,7 @@ class ListViewVC : UITableViewController, JLActionSheetDelegate {
     }
     
     @IBAction func btnActionAddNew(sender:UIBarButtonItem){
-        var actionSheet = JLActionSheet(title: "", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: ["Scan Barcode", "Add Item"])
+        var actionSheet = JLActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: ["Scan Barcode", "Fill Info"])
         actionSheet.style = JLSTYLE_MISTERLISTER
         actionSheet.showOnViewController(self)
     }
@@ -127,7 +127,7 @@ class ListViewVC : UITableViewController, JLActionSheetDelegate {
             if sender != nil { (vc as ItemEditVC).setItemInfo(sender as ListItem)}
             break
         case "SEGUE_VIEW_ITEM":
-//            (vc as ItemViewVC).setItem( _list[ (sender as NSIndexPath).row ] )
+            (vc as ItemViewVC).setItem( _list[ (sender as NSIndexPath).row ] )
             break
         case "SEGUE_SHOW_CAMERA":
             break
@@ -137,6 +137,8 @@ class ListViewVC : UITableViewController, JLActionSheetDelegate {
     }
 }
 
+
+// ------------------------------------------------------------------------
 // UITableView Delegate Methods
 extension ListViewVC {
     
@@ -188,11 +190,10 @@ extension ListViewVC {
         var str = "        "
         var moreRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: str,
             handler:{action, indexpath in
-            
-                self.performSegueWithIdentifier("SEGUE_EDIT_ITEM", sender: self._list[indexPath.row])
-
+            self.performSegueWithIdentifier("SEGUE_EDIT_ITEM", sender: self._list[indexPath.row])
             println("MORE•ACTION");
         });
+        
         var img = UIImage(named:"tbl_cell_edit")!
         var newSize = CGSizeMake(75, 55)
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);
@@ -217,11 +218,12 @@ extension ListViewVC {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        self.performSegueWithIdentifier("SEGUE_VIEW_ITEM", sender: indexPath.row)
+        self.performSegueWithIdentifier("SEGUE_VIEW_ITEM", sender: indexPath)
     }
 }
 
 
+// ------------------------------------------------------------------------
 // JLActionSheet delegate methods
 extension ListViewVC {
     func actionSheet(actionSheet: JLActionSheet!, clickedButtonAtIndex buttonIndex: Int) {

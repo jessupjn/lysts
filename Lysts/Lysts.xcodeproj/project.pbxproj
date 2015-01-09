@@ -564,7 +564,7 @@
 				INFOPLIST_FILE = Lysts/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2140ee61-fca4-40a2-85ed-e7bfe6f378bc";
+				PROVISIONING_PROFILE = "";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Lysts/Lysts-Bridging-Header.h";
 			};
@@ -579,7 +579,7 @@
 				INFOPLIST_FILE = Lysts/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2140ee61-fca4-40a2-85ed-e7bfe6f378bc";
+				PROVISIONING_PROFILE = "";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Lysts/Lysts-Bridging-Header.h";
 			};

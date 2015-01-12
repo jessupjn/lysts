@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="kiQ-7B-CeD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C94b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="kiQ-7B-CeD">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -497,19 +497,13 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="142"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EcV-Do-IZ8">
-                                            <rect key="frame" x="318" y="113" width="42" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="leI-ef-og0">
-                                            <rect key="frame" x="10" y="105" width="20" height="20"/>
+                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="u27-TT-UAu">
+                                            <rect key="frame" x="290" y="114" width="20" height="20"/>
                                         </activityIndicatorView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="leI-ef-og0" secondAttribute="bottom" constant="17" id="rnf-Cc-WHC"/>
-                                        <constraint firstItem="leI-ef-og0" firstAttribute="leading" secondItem="mXM-gI-6G3" secondAttribute="leading" constant="10" id="yKP-Vc-gtz"/>
+                                        <constraint firstAttribute="bottom" secondItem="u27-TT-UAu" secondAttribute="bottom" constant="8" id="8oS-l9-8jS"/>
+                                        <constraint firstAttribute="centerX" secondItem="u27-TT-UAu" secondAttribute="centerX" id="fZv-pW-fpp"/>
                                     </constraints>
                                 </view>
                                 <constraints>
@@ -532,8 +526,10 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="_activityIndicator" destination="u27-TT-UAu" id="7IG-Ue-bLJ"/>
                         <outlet property="_highlightView" destination="RCY-Vf-E8e" id="VGn-Df-65j"/>
                         <outlet property="_resultsHeightConstraint" destination="sXE-ko-Phr" id="FF7-8M-cf2"/>
+                        <outlet property="_resultsView" destination="mXM-gI-6G3" id="mYU-ua-wZR"/>
                         <outlet property="view" destination="Y9t-8f-3kA" id="AMp-9M-eDA"/>
                     </connections>
                 </viewController>
@@ -722,9 +718,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Btn-Add-Item" width="22" height="22"/>
+        <image name="Btn-Add-Item" width="23" height="23"/>
         <image name="Btn-Back" width="22" height="22"/>
-        <image name="Btn-Cam" width="22" height="13"/>
+        <image name="Btn-Cam" width="23" height="23"/>
         <image name="Btn-Menu" width="22" height="22"/>
         <image name="Btn-Share" width="22" height="22"/>
         <image name="img-touchID" width="83" height="81"/>

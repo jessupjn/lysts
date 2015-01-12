@@ -24,7 +24,9 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var _previewLayer : AVCaptureVideoPreviewLayer!
     
     @IBOutlet var _resultsHeightConstraint : NSLayoutConstraint!
+    @IBOutlet var _activityIndicator : UIActivityIndicatorView!
     @IBOutlet var _highlightView : UIView!
+    @IBOutlet var _resultsView : UIView!
     var _btnFindInfo : UIButton!
     var _btnAddInfo : UIButton!
     var _label : UILabel!
@@ -50,7 +52,7 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         var highlightViewRect = CGRectZero
         var barCodeObject : AVMetadataMachineReadableCodeObject!
-        var detectionString : NSString!
+        var detectionString = NSString()
         var barCodeTypes:[NSString] = [AVMetadataObjectTypeUPCECode, AVMetadataObjectTypeCode39Code, AVMetadataObjectTypeCode39Mod43Code, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode93Code, AVMetadataObjectTypeCode128Code, AVMetadataObjectTypePDF417Code, AVMetadataObjectTypeQRCode, AVMetadataObjectTypeAztecCode]
         var dataObjects = metadataObjects as [AVMetadataObject]
         
@@ -68,16 +70,61 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             }
         }
         
-        if detectionString == nil {
-        
-        } else {
+        if self._resultsHeightConstraint.constant == 0 && detectionString.length > 0 {
+            self._resultsHeightConstraint.constant = 45
             UIView.animateWithDuration(0.2, animations: { () -> Void in
-                self._resultsHeightConstraint.constant = 45
                 self.view.layoutIfNeeded()
-            })
+                self._activityIndicator.startAnimating()
+            }, completion: { (done) -> Void in
+                let w : CGFloat = 20;
+                var x : CGFloat = (UIScreen.mainScreen().bounds.width - (w * CGFloat(detectionString.length)))/2;
+                
+                var dict = NSMutableDictionary()
+                dict.setObject(detectionString, forKey: "string")
+                dict.setObject(0, forKey: "currIndex")
+                dict.setObject(x, forKey: "x-value")
+                dict.setObject(w, forKey: "w-value")
+                var timer = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: "showDetectedBarcode:", userInfo: dict, repeats: true)
+                timer.fire()
+                
+            });
         }
         
         _highlightView.layer.frame = highlightViewRect;
+    }
+    
+    func showDetectedBarcode(timer:NSTimer) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            var s = timer.userInfo?.objectForKey("string") as String
+            var index = timer.userInfo?.objectForKey("currIndex") as CGFloat
+            var x = timer.userInfo?.objectForKey("x-value") as CGFloat
+            var w = timer.userInfo?.objectForKey("w-value") as CGFloat
+            
+            var lbl = UILabel(frame: CGRectMake(x+(w*index), 10, w, w))
+            lbl.textColor = .blackColor()
+            lbl.textAlignment = .Center
+            lbl.font = UIFont(name: "AvenirNext-DemiBold", size: 1)
+            
+            var start = advance(s.startIndex, Int(index))
+            lbl.text = String( s[start] )
+            self._resultsView.addSubview(lbl)
+            
+            UIView.animateWithDuration(0.1, animations: { () -> Void in
+                lbl.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
+                }) { (c) -> Void in
+                    UIView.animateWithDuration(0.07, animations: { () -> Void in
+                        lbl.font = UIFont(name: "AvenirNext-DemiBold", size: 16)
+                    })
+            }
+            x += 20
+            
+            timer.userInfo?.setObject( ++index, forKey: "currIndex")
+            if index == CGFloat(countElements(s)) {
+                timer.invalidate()
+            }
+            
+        })
     }
     
     //

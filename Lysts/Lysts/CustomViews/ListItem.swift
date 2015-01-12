@@ -64,7 +64,14 @@ class ListItem : NSObject, NSCoding {
         else { return nil }
     }
     
-    func getImages() -> [NSURL]? {
+    func getImages() -> [UIImage]? {
+        if let t = _images {
+            if t.count > 0 { return t }
+            else { return nil }
+        } else { return nil }
+    }
+    
+    func getImageLinks() -> [NSURL]? {
         if let t = _imageUrls {
             if t.count > 0 { return t }
             else { return nil }

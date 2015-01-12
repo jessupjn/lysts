@@ -30,14 +30,40 @@ class ItemViewVC : UIViewController {
         })
         self.navigationController?.navigationItem.backBarButtonItem?.title = "list"
         self.title = _item.getTitle()
-        if _item.getImages() != nil {
+        if _item.getImageLinks() != nil || _item.getImages() != nil {
             imgHeightConstraint.constant = 200
             self.view.layoutIfNeeded()
             
             _pagedImv = PagedURLImageView(frame: CGRectMake(0, 0, viwImages.frame.width, viwImages.frame.height))
             viwImages.addSubview(_pagedImv)
             
-            _pagedImv.setURLS( _item.getImages()! )
+            var errorOccured = false
+            if _item.getImageLinks() != nil { _pagedImv.setImages( _item.getImageLinks()!, error: {
+                () -> Void in
+                    self.imgHeightConstraint.constant = 60
+                    self._pagedImv.removeFromSuperview()
+                    UIView.animateWithDuration(0.25, animations: { () -> Void in
+                        self.viwImages.backgroundColor = .lightGrayColor()
+                        self.view.layoutIfNeeded()
+                        }, completion: { (fin) -> Void in
+                            if errorOccured { return }
+                            
+                            errorOccured = true
+                            var lbl = UILabel(frame: CGRectMake(0, 0, self.viwImages.frame.width, self.viwImages.frame.height))
+                            lbl.alpha = 0;
+                            lbl.text = "error loading images"
+                            lbl.textAlignment = .Center
+                            lbl.textColor = .whiteColor()
+                            lbl.font = UIFont(name: "AvenirNext-DemiBold", size: 12)!
+                            self.viwImages.addSubview(lbl)
+                            UIView.animateWithDuration(0.2, animations: {
+                                () -> Void in
+                                lbl.alpha = 1
+                            })
+                    })
+
+                })
+            } else { _pagedImv.setImages( _item.getImages()! ) }
         
         } else {
             imgHeightConstraint.constant = 0

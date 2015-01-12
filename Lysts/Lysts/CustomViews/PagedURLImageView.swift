@@ -11,6 +11,7 @@ import UIKit
 
 class PagedURLImageView : UIView, UIScrollViewDelegate {
         
+    private var singleton = Singleton.getSingleton()
     private var scrlViw = UIScrollView()
     private var loadScrn = UIView()
     private var spinner = UIActivityIndicatorView(activityIndicatorStyle: .White)
@@ -33,13 +34,13 @@ class PagedURLImageView : UIView, UIScrollViewDelegate {
         // add paging
         pageIndicator.frame = CGRectMake(0,frame.height - 20, frame.width, 20)
         pageIndicator.numberOfPages = 2
-        pageIndicator.currentPageIndicatorTintColor = .darkGrayColor()
-        pageIndicator.pageIndicatorTintColor = .lightGrayColor()
+        pageIndicator.currentPageIndicatorTintColor = UIColor(red: 255.0/255, green: 200.0/255, blue: 95.0/255, alpha: 1.0)
+        pageIndicator.pageIndicatorTintColor = UIColor(red: 255.0/255, green: 240.0/255, blue: 160.0/255, alpha: 1.0)
         self.addSubview(pageIndicator)
 
         // load screen
         loadScrn.frame = CGRectMake(0, 0, frame.width, frame.height)
-        loadScrn.backgroundColor = Singleton.getSingleton().UIColorFromHex(0x000000, alpha: 0.6)
+        loadScrn.backgroundColor = singleton.UIColorFromHex(0x000000, alpha: 0.6)
         self.addSubview(loadScrn)
         loadScrn.hidden = true
         
@@ -60,7 +61,7 @@ class PagedURLImageView : UIView, UIScrollViewDelegate {
     }
     
     private var imageLoadCount = 0
-    func setURLS(urls:[NSURL]) {
+    func setImages(urls:[NSURL], error:()->Void) {
         pageIndicator.numberOfPages = urls.count
     
         loadScrn.hidden = false
@@ -78,9 +79,7 @@ class PagedURLImageView : UIView, UIScrollViewDelegate {
                     self.spinner.stopAnimating()
                     self.loadScrn.removeFromSuperview()
                 }
-            }, errorBlock: { () -> Void in
-                println("error loading image")
-            })
+            }, errorBlock: error )
             x += horizontal_jump
         }
         scrlViw.contentSize = CGSizeMake(x, 10)
@@ -115,11 +114,16 @@ class PagedURLImageView : UIView, UIScrollViewDelegate {
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), {
             () -> Void in
             var data = NSData(contentsOfURL: URL)
-            var image = UIImage(data: data!)
             dispatch_async( dispatch_get_main_queue(), {
                 () -> Void in
-                if image != nil { successBlock(image: image!) }
-                else { errorBlock() }
+
+                var image : UIImage?
+                if let d = data {
+                    var image = UIImage(data: d)
+                    if let i = image {
+                        successBlock(image: i)
+                    } else { errorBlock() }
+                } else { errorBlock() }
             })
         })
     }

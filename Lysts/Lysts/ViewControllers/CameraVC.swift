@@ -54,17 +54,17 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         var barCodeObject : AVMetadataMachineReadableCodeObject!
         var detectionString = NSString()
         var barCodeTypes:[NSString] = [AVMetadataObjectTypeUPCECode, AVMetadataObjectTypeCode39Code, AVMetadataObjectTypeCode39Mod43Code, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode93Code, AVMetadataObjectTypeCode128Code, AVMetadataObjectTypePDF417Code, AVMetadataObjectTypeQRCode, AVMetadataObjectTypeAztecCode]
-        var dataObjects = metadataObjects as [AVMetadataObject]
+        var dataObjects = metadataObjects as! [AVMetadataObject]
         
         for metadata in dataObjects {
             for type:NSString in barCodeTypes {
                 if (metadata as AVMetadataObject).type == type {
 
-                    barCodeObject = _previewLayer.transformedMetadataObjectForMetadataObject(metadata as AVMetadataMachineReadableCodeObject) as AVMetadataMachineReadableCodeObject
+                    barCodeObject = _previewLayer.transformedMetadataObjectForMetadataObject(metadata as! AVMetadataMachineReadableCodeObject) as! AVMetadataMachineReadableCodeObject
                     highlightViewRect = barCodeObject.bounds
                     if highlightViewRect.width < 20 { highlightViewRect.size.width = 20 }
                     if highlightViewRect.height < 20 { highlightViewRect.size.height = 20 }
-                    detectionString = (metadata as AVMetadataMachineReadableCodeObject).stringValue
+                    detectionString = (metadata as! AVMetadataMachineReadableCodeObject).stringValue
                     break;
                 }
             }
@@ -96,10 +96,10 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     func showDetectedBarcode(timer:NSTimer) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
-            var s = timer.userInfo?.objectForKey("string") as String
-            var index = timer.userInfo?.objectForKey("currIndex") as CGFloat
-            var x = timer.userInfo?.objectForKey("x-value") as CGFloat
-            var w = timer.userInfo?.objectForKey("w-value") as CGFloat
+            var s = timer.userInfo?.objectForKey("string") as! String
+            var index = timer.userInfo?.objectForKey("currIndex") as! CGFloat
+            var x = timer.userInfo?.objectForKey("x-value") as! CGFloat
+            var w = timer.userInfo?.objectForKey("w-value") as! CGFloat
             
             var lbl = UILabel(frame: CGRectMake(x+(w*index), 10, w, w))
             lbl.textColor = .blackColor()
@@ -120,7 +120,7 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             x += 20
             
             timer.userInfo?.setObject( ++index, forKey: "currIndex")
-            if index == CGFloat(countElements(s)) {
+            if index == CGFloat( count(s) ) {
                 timer.invalidate()
             }
             
@@ -138,7 +138,7 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         _device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
         var error:NSErrorPointer = nil
         
-        _input = AVCaptureDeviceInput.deviceInputWithDevice(_device, error: error) as AVCaptureDeviceInput
+        _input = AVCaptureDeviceInput.deviceInputWithDevice(_device, error: error) as! AVCaptureDeviceInput
         if _input != nil {
             _session.addInput( _input )
         } else {
@@ -151,7 +151,7 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         _output.metadataObjectTypes = _output.availableMetadataObjectTypes
         
-        _previewLayer = AVCaptureVideoPreviewLayer.layerWithSession(_session) as AVCaptureVideoPreviewLayer
+        _previewLayer = AVCaptureVideoPreviewLayer.layerWithSession(_session) as! AVCaptureVideoPreviewLayer
         _previewLayer.frame = self.view.bounds
         _previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         _previewLayer.zPosition = -5
@@ -160,7 +160,7 @@ class CameraVC : UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         _session.startRunning()
         
-        var xButton = UIButton.buttonWithType(.Custom) as UIButton
+        var xButton = UIButton.buttonWithType(.Custom) as! UIButton
         xButton.frame = CGRectMake(10,10,46,30)
         xButton.titleLabel!.text = "X"
         xButton.titleLabel!.font = .systemFontOfSize(30)

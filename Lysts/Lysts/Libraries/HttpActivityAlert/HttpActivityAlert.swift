@@ -58,7 +58,7 @@ class HttpActivityAlert : NSObject {
     /* --- properties --- */
     var animationType : HttpActivityAlertAnimationType = .ColorCircleCover
     var presentationAnimation : HttpActivityAlertPresentationType = .SquareAlertViewOutOfTop
-    var title : NSString? = nil
+    var title : String? = nil
     var cornerRadius : CGFloat = 20
     var animationColors:[UIColor]
     var textColor:UIColor = HttpActivityAlert.hexColor(0xdddddd)
@@ -168,7 +168,6 @@ class HttpActivityAlert : NSObject {
         var finalFrame : CGRect!
         var bounds = UIScreen.mainScreen().bounds
         var b = bounds.width > bounds.height ? bounds.height : bounds.width
-        println(self.presentationAnimation.description())
         switch self.presentationAnimation.shape() {
         case "rect":
             finalFrame = CGRectMake(bounds.width/2-b/3, bounds.height/2-b/8, b/1.5, b/4)
@@ -322,7 +321,7 @@ class HttpActivityAlert : NSObject {
         if httpRequest == nil { return; }
         let task = NSURLSession.sharedSession().dataTaskWithRequest(
             self.httpRequest!,
-            {
+            completionHandler: {
                 data, response, error in
                 
                 if error != nil {

@@ -17,7 +17,7 @@ class ItemCell : UITableViewCell {
     var _item : ListItem!
         
     init(item:ListItem) {
-        super.init()
+        super.init(style: .Default, reuseIdentifier: "itemCell")
         setItem(item)
     }
 

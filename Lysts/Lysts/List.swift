@@ -59,7 +59,7 @@ class List : NSObject, NSCoding {
     }
     
     func name() -> String { return _name }
-    func description() -> String? { return _description }
+    func getDescription() -> String? { return _description }
     func isEncrypted() -> Bool {
         if self._encrypted == nil { return false }
         return _encrypted!

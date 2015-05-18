@@ -53,23 +53,23 @@ class JackAlertView : NSObject {
             vibrancyView.contentView.addSubview(helper)
 
             // cancel button
-            helper = UIButton.buttonWithType(.Custom) as UIView
+            helper = UIButton.buttonWithType(.Custom) as! UIView
             helper.frame = CGRectMake(0, alertView.frame.height-50, alertView.frame.width/2, 50)
-            (helper as UIButton).setTitle("Cancel", forState: .Normal)
-            (helper as UIButton).addTarget(self, action: "cancel:", forControlEvents: .TouchUpInside)
+            (helper as! UIButton).setTitle("Cancel", forState: .Normal)
+            (helper as! UIButton).addTarget(self, action: "cancel:", forControlEvents: .TouchUpInside)
             vibrancyView.contentView.addSubview(helper)
             
             // ok button
-            helper = UIButton.buttonWithType(.Custom) as UIView
+            helper = UIButton.buttonWithType(.Custom) as! UIView
             helper.frame = CGRectMake(alertView.frame.width/2, alertView.frame.height-50, alertView.frame.width/2, 50)
-            (helper as UIButton).setTitle(ok_title, forState: .Normal)
-            (helper as UIButton).addTarget(self, action: "handler", forControlEvents: .TouchUpInside)
+            (helper as! UIButton).setTitle(ok_title, forState: .Normal)
+            (helper as! UIButton).addTarget(self, action: "handler", forControlEvents: .TouchUpInside)
             vibrancyView.contentView.addSubview(helper)
 
         } else {
-            helper = UIButton.buttonWithType(.Custom) as UIView
+            helper = UIButton.buttonWithType(.Custom) as! UIView
             helper.frame = CGRectMake(0, alertView.frame.height-50, alertView.frame.width, 50)
-            (helper as UIButton).setTitle(ok_title, forState: .Normal)
+            (helper as! UIButton).setTitle(ok_title, forState: .Normal)
             vibrancyView.contentView.addSubview(helper)
         }
 //        var lbl = UILabel()

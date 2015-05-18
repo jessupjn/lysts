@@ -79,7 +79,7 @@ class ListEditVC : UIViewController, UITextFieldDelegate {
         _secure_switch.setOn(false, animated: false)
         if _list != nil {
             _txfName.text = _list?.name()
-            if _list!.description() != nil { _txfDescription.text = _list!.description() }
+            if _list!.getDescription() != nil { _txfDescription.text = _list!.getDescription() }
             _secure_switch.setOn(_list!.isEncrypted(), animated: false)
         }
     }
@@ -94,7 +94,7 @@ class ListEditVC : UIViewController, UITextFieldDelegate {
         var description = _txfDescription.text
         var encrypt = _secure_switch.on
         
-        if countElements(name) < 1 {
+        if count(name) < 1 {
             println("name not long enough")
             return
         }

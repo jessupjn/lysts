@@ -118,7 +118,7 @@ extension Singleton {
 //
 extension Singleton {
     
-    func getProductInfo(barcode:NSString, callback:(Dictionary<String, AnyObject>, String?)->Void)
+    func getProductInfo(barcode:String, callback:(Dictionary<String, AnyObject>, String?)->Void)
     {
         lookupBarcode.makeRequest(barcode, callback: callback)
     }

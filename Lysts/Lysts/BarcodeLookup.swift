@@ -19,7 +19,7 @@ class BarcodeLookup : NSObject {
     let URL_STRING = "http://www.outpan.com/api/get_product.php?"
     
     internal
-    func makeRequest(barcode:NSString, callback:(Dictionary<String, AnyObject>, String?)->Void)
+    func makeRequest(barcode:String, callback:(Dictionary<String, AnyObject>, String?)->Void)
     {
         var stringUrl = URL_STRING
 //        stringUrl += "apikey=" + API_KEY
@@ -30,14 +30,14 @@ class BarcodeLookup : NSObject {
         var request = NSMutableURLRequest(URL: url!)
         let task = NSURLSession.sharedSession().dataTaskWithRequest(
             request,
-            {
+            completionHandler: {
                 data, response, error in
                 
                 println("Made Request For: \(barcode)")
                 if error != nil {
                     callback(Dictionary<String, AnyObject>(), error.localizedDescription)
                 } else {
-                    var jsonObj = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as Dictionary<String, AnyObject>
+                    var jsonObj = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as! Dictionary<String, AnyObject>
                     callback(jsonObj, nil)
                 }
         })

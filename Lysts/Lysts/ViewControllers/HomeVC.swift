@@ -27,14 +27,14 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
         self.view.backgroundColor = singleton.UIColorFromHex(0xFAFAFF, alpha: 1)
         var images : [UIImage] = [UIImage(named: "Btn-New-List")!.changeImageColor(UIColor.whiteColor()),
             UIImage(named: "Btn-Cam")!.changeImageColor(UIColor.whiteColor()),
-            UIImage(named: "Btn-Settings")!.changeImageColor(UIColor.whiteColor()) ]
+            UIImage(named: "btn-settings")!.changeImageColor(UIColor.whiteColor()) ]
         _menu = RNFrostedSidebar(images: images)
         _menu.borderWidth = 2
         _menu.delegate = self
         
-        var title:NSString = "mister lister";
+        var title:String = "mister lister";
         var attributedTitle = NSMutableAttributedString(string: title)
-        attributedTitle.addAttribute(NSKernAttributeName, value:2.0, range:NSMakeRange(0,title.length));
+        attributedTitle.addAttribute(NSKernAttributeName, value:2.0, range:NSMakeRange(0,count(title)));
         
         var size: CGSize = title.sizeWithAttributes([NSFontAttributeName: UIFont.systemFontOfSize(40.0)])
         var titleLabel : UILabel = UILabel(frame: CGRectMake((UIScreen.mainScreen().applicationFrame.size.width / 2.0) - ((size.width + 10.0) / 2.0), (self.navigationController!.navigationBar.frame.size.height / 2.0) - 30.0, size.width + 10.0, 60.0));
@@ -75,7 +75,7 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        var vc = segue.destinationViewController as UIViewController
+        var vc = segue.destinationViewController as! UIViewController
         
         switch segue.identifier! {
         case "SEGUE_SHOW_CAMERA":
@@ -92,7 +92,7 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
         case "SEGUE_LIST_INFO":
             var st = ""
             if let index = sender as? Int { st = _lists![index] }
-            var list = singleton.getList(st)?
+            var list = singleton.getList(st)
             if let listEditVC = vc as? ListEditVC { listEditVC.delegate=self; listEditVC.setListInfo(list) }
             break
         default:
@@ -188,8 +188,8 @@ class HomeVC : UITableViewController, RNFrostedSidebarDelegate, ListEditVCDelega
         singleton.getProductInfo("078915030900", callback: {
             (data:Dictionary<String, AnyObject>, error:String?) -> Void in
             
-            var name = data["name"] as String!
-            var barcode = data["barcode"] as String!
+            var name = data["name"] as! String!
+            var barcode = data["barcode"] as! String!
             println("HomeVC: Got Response:\n\(barcode), \(name)")
         });
         
@@ -221,7 +221,7 @@ extension HomeVC {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("myCell", forIndexPath: indexPath) as UITableViewCell;
+        let cell = tableView.dequeueReusableCellWithIdentifier("myCell", forIndexPath: indexPath) as! UITableViewCell;
         
         cell.backgroundColor = singleton.UIColorFromHex(0xFAFAFF, alpha: 1)
 
@@ -262,7 +262,7 @@ extension HomeVC {
         var timeinterval = NSDate.timeIntervalSinceDate( list!.lastUpdated() )
         var date = NSDate()
         
-        var gregorianCalendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)!
+        var gregorianCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
         var components = gregorianCalendar.components(.DayCalendarUnit | .HourCalendarUnit | .MinuteCalendarUnit | .SecondCalendarUnit, fromDate: list!.lastUpdated(), toDate: date, options: nil)
         
         if components.day < 1 {

@@ -56,7 +56,7 @@ class PagedURLImageView : UIView, UIScrollViewDelegate {
     }
 
     required init(coder aDecoder: NSCoder) {
-        super.init()
+        super.init(coder: aDecoder)
 //        fatalError("init(coder:) has not been implemented")
     }
     

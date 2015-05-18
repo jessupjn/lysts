@@ -83,34 +83,6 @@ class ListViewVC : UITableViewController, JLActionSheetDelegate {
 //        }
     }
     
-    func expandCell(sender:UIView, event:UIEvent) {
-        
-        var flag = false
-        // get any touch on the buttonView
-        if let touch = event.touchesForView(sender)?.anyObject() as? UITouch {
-            // print the touch location on the button
-            var point = touch.locationInView(tableView)
-            
-            if let v = find(_selected, sender.tag) {
-                _selected.removeAtIndex(v)
-            } else {
-                _selected.append(sender.tag)
-                flag = true
-            }
-        
-            tableView.beginUpdates()
-            tableView.endUpdates()
-            
-            if flag {
-                if point.y + 100 > tableView.contentOffset.y + tableView.frame.height {
-                    var y = tableView.contentOffset.y + 100
-                    tableView.setContentOffset(CGPointMake(tableView.contentOffset.x, y), animated: true)
-                }
-            }
-
-        }
-    }
-    
     @IBAction func btnActionAddNew(sender:UIBarButtonItem){
         var actionSheet = JLActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: ["Scan Barcode", "Fill Info"])
         actionSheet.style = JLSTYLE_MISTERLISTER
@@ -120,19 +92,14 @@ class ListViewVC : UITableViewController, JLActionSheetDelegate {
     func endEditing() { self.view.endEditing(true) }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        var vc = segue.destinationViewController as UIViewController
+        var vc = segue.destinationViewController as! UIViewController
         
-        switch segue.identifier! {
-        case "SEGUE_EDIT_ITEM":
-            if sender != nil { (vc as ItemEditVC).setItemInfo(sender as ListItem)}
-            break
-        case "SEGUE_VIEW_ITEM":
-            (vc as ItemViewVC).setItem( _list[ (sender as NSIndexPath).row ] )
-            break
-        case "SEGUE_SHOW_CAMERA":
-            break
-        default:
-            break
+        if vc is ItemEditVC {
+            if sender != nil { (vc as! ItemEditVC).setItemInfo(sender as! ListItem)}
+        } else if vc is ItemViewVC {
+            (vc as! ItemViewVC).setItem( _list[ (sender as! NSIndexPath).row ] )
+        } else {
+            
         }
     }
 }
@@ -158,7 +125,7 @@ extension ListViewVC {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("itemCell", forIndexPath: indexPath) as UITableViewCell;
+        let cell = tableView.dequeueReusableCellWithIdentifier("itemCell", forIndexPath: indexPath) as! UITableViewCell;
 
         cell.textLabel!.text =  "\(indexPath.row)"
         cell.textLabel!.font = UIFont(name: "AvenirNext-Regular", size: 14)
